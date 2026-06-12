@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant User
+    participant CLI
+    participant Calculator
+    participant History
+    User->>CLI: enter operand1, operator, operand2
+    CLI->>Calculator: add/subtract/multiply/divide(operand1, operand2)
+    Calculator-->>CLI: result
+    Calculator->>History: record(CalculationRecord)
+    CLI-->>User: display result

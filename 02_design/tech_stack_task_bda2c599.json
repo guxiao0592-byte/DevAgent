@@ -1,0 +1,23 @@
+{
+  "language": "Python 3.11+",
+  "framework": {
+    "name": "None",
+    "rationale": "Simple CLI application, no framework needed"
+  },
+  "database": {
+    "name": "None",
+    "rationale": "History stored in-memory, no persistence required"
+  },
+  "cache": {
+    "name": "None",
+    "rationale": "No caching needed"
+  },
+  "message_queue": {
+    "name": "None",
+    "rationale": "No async processing needed"
+  },
+  "deployment": {
+    "name": "pip install",
+    "rationale": "Standard Python package distribution"
+  }
+}

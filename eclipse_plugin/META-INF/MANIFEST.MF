@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DevAgent
+Bundle-SymbolicName: com.devagent.eclipse; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: DevAgent Team
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Export-Package: com.devagent.eclipse.views,
+ com.devagent.eclipse.actions,
+ com.devagent.eclipse.preferences
+Import-Package: org.apache.http.client.methods,
+ org.apache.http.impl.client,
+ org.apache.http.entity

@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant User
+    participant CLI
+    participant Calculator
+    participant History
+    User->>CLI: enter operator, operand
+    CLI->>Calculator: chain_calculate([(operator, operand)])
+    Calculator->>Calculator: use previous result as first operand
+    Calculator-->>CLI: new result
+    Calculator->>History: record(CalculationRecord)
+    CLI-->>User: display new result

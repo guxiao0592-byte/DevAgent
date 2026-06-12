@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+actor User
+rectangle "Calculator" {
+  usecase "Perform Basic Calculation" as UC1
+  usecase "Perform Chain Calculation" as UC2
+  usecase "View History" as UC3
+}
+User --> UC1
+User --> UC2
+User --> UC3
+@enduml

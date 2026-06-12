@@ -1,0 +1,20 @@
+{
+  "task_id": "task_c655f131",
+  "task_type": "agentic",
+  "task_description": "test detail endpoint",
+  "status": "FAILED",
+  "created_at": "2026-06-12T12:37:18.479543",
+  "completed_at": "",
+  "iterations": 19,
+  "files_modified": [],
+  "test_passed": 0,
+  "test_failed": 0,
+  "errors": [
+    {
+      "phase": "execution",
+      "message": "Status: FAILED"
+    }
+  ],
+  "duration_sec": 1124.3,
+  "event_count": 0
+}

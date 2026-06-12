@@ -1,0 +1,98 @@
+# ============================================================================
+# DevAgent Unified Architecture Configuration
+# ============================================================================
+
+# Model provider settings
+model:
+  provider: deepseek  # openai or deepseek
+  deepseek:
+    api_key: sk-2597cd727089467d812b0be7e670b5bd
+    base_url: https://api.deepseek.com
+    model: deepseek-chat
+    temperature: 0.3
+    max_tokens: 8192
+  openai:
+    api_key: ${OPENAI_API_KEY}
+    base_url: https://api.openai.com/v1
+    model: gpt-4o
+    temperature: 0.3
+    max_tokens: 8192
+
+# ============================================================================
+# Unified Agent Settings
+# ============================================================================
+agent:
+  # ReAct loop settings
+  max_iterations: 50           # Maximum ReAct loop iterations
+  stuck_window: 5              # Consecutive non-productive rounds before stuck detection
+
+  # Pipeline tool settings (V1 agent adapters)
+  pipeline:
+    enable_self_review: true   # Self-reflection before returning results
+    diagram_retry: 2           # Design diagram validation retries
+    pytest_timeout: 120        # Test execution timeout
+
+# ============================================================================
+# Workflow settings (legacy V1 — for backward compat)
+# ============================================================================
+workflow:
+  max_retry: 2
+  enable_quality_gates: true
+  enable_planning: true
+
+# ============================================================================
+# Tool settings
+# ============================================================================
+tools:
+  pytest_timeout: 60
+  sandbox_timeout: 120
+  execution_dir: ./execution_sandbox
+
+# ============================================================================
+# Interactive Mode — Real-time user interaction and feedback
+# ============================================================================
+interaction:
+  enabled: false               # Enable real-time interactive mode
+  mode: full                   # full | approval | observe | off
+
+  approval:
+    enabled: true
+    auto_approve_destructive: false
+    auto_approve_large_edit: false
+    default_timeout: 120
+
+  dialogue:
+    enabled: true
+    max_questions: 10
+    question_timeout: 300
+
+  # Phase review (quality gates with human approval)
+  review:
+    enabled: true
+    quality_evaluation: true   # LLM auto-scores before human review
+    default_timeout: 600       # Human review timeout (seconds)
+
+  streaming:
+    token_streaming: true
+    snapshot_interval_ms: 500
+    max_recent_steps: 5
+
+  notifications:
+    task_complete: true
+    approval_required: true
+    error_occurred: true
+    webhook_url: ""
+
+# ============================================================================
+# Output settings
+# ============================================================================
+output:
+  root: ./outputs
+  artifact_prefix: true
+
+# ============================================================================
+# Logging
+# ============================================================================
+logging:
+  level: INFO
+  file: ./outputs/execution.log

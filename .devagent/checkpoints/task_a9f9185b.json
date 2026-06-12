@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "task_id": "task_a9f9185b",
+  "task_type": "agentic",
+  "workspace": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent",
+  "task_description": "test agentic creation",
+  "current_iteration": 1,
+  "max_iterations": 60,
+  "status": "FAILED",
+  "action_history": [],
+  "observation_history": [],
+  "modified_files": [],
+  "test_results": {},
+  "sub_tasks": [],
+  "current_sub_task": ""
+}

@@ -1,0 +1,15 @@
+{
+  "task_id": "task_89780d34",
+  "task_type": "agentic",
+  "task_description": "Call request_review phase=delivery title=Done summary=Done. Then submit.",
+  "status": "COMPLETED",
+  "created_at": "2026-06-01T19:20:42.957993",
+  "completed_at": "",
+  "iterations": 2,
+  "files_modified": [],
+  "test_passed": 0,
+  "test_failed": 0,
+  "errors": [],
+  "duration_sec": 10.7,
+  "event_count": 0
+}

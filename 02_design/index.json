@@ -1,0 +1,228 @@
+{
+  "artifacts": [
+    {
+      "id": "design_md_task_bda2c599",
+      "type": "design:spec",
+      "format": "md",
+      "filename": "design_md_task_bda2c599.md",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/design_md_task_bda2c599.md",
+      "timestamp": "2026-06-12T00:33:30.037497+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ]
+      },
+      "size": 8546,
+      "checksum": "6fefd6a09b9085536155c26875e85ffe55dd64e5f1408d5318e070e24e11fa95",
+      "mime_type": "text/markdown",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "class_diagram_mermaid_task_bda2c599",
+      "type": "design:class_diagram_mermaid",
+      "format": "mermaid",
+      "filename": "class_diagram.mmd",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/class_diagram.mmd",
+      "timestamp": "2026-06-12T00:33:30.037981+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "class_diagram.mmd"
+      },
+      "size": 834,
+      "checksum": "23f279fc4b39f02bf7b994d3a252700d1ebd66ac9344fa29dc27919ebf26f5cc",
+      "mime_type": "application/vnd.chipnuts.karaoke-mmd",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "er_diagram_mermaid_task_bda2c599",
+      "type": "design:er_diagram_mermaid",
+      "format": "mermaid",
+      "filename": "er_diagram.mmd",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/er_diagram.mmd",
+      "timestamp": "2026-06-12T00:33:30.038349+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "er_diagram.mmd"
+      },
+      "size": 158,
+      "checksum": "478eb870fa7624ae9d9b521972d5cafadb3f73cca81f2429d3ef20e2ce61031f",
+      "mime_type": "application/vnd.chipnuts.karaoke-mmd",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "sequence_1_task_bda2c599",
+      "type": "design:sequence_diagram",
+      "format": "mermaid",
+      "filename": "sequence_diagram_1.mmd",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/sequence_diagram_1.mmd",
+      "timestamp": "2026-06-12T00:33:30.039164+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "sequence_diagram_1.mmd"
+      },
+      "size": 343,
+      "checksum": "b7284347e2074c925921124a3d9d849e4564bfe2375abe89c15bb79f8a55268e",
+      "mime_type": "application/vnd.chipnuts.karaoke-mmd",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "sequence_2_task_bda2c599",
+      "type": "design:sequence_diagram",
+      "format": "mermaid",
+      "filename": "sequence_diagram_2.mmd",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/sequence_diagram_2.mmd",
+      "timestamp": "2026-06-12T00:33:30.039559+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "sequence_diagram_2.mmd"
+      },
+      "size": 396,
+      "checksum": "7251b18aefaf49ccef5ffddacb2d5ca24acc5db34ebe686e2c91cd0981f99309",
+      "mime_type": "application/vnd.chipnuts.karaoke-mmd",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "sequence_3_task_bda2c599",
+      "type": "design:sequence_diagram",
+      "format": "mermaid",
+      "filename": "sequence_diagram_3.mmd",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/sequence_diagram_3.mmd",
+      "timestamp": "2026-06-12T00:33:30.039992+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "sequence_diagram_3.mmd"
+      },
+      "size": 233,
+      "checksum": "8b0745ce6b8081cc6686b0a715e8bf2b9df2f0252fc64229f8ca7065452999fe",
+      "mime_type": "application/vnd.chipnuts.karaoke-mmd",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "db_schema_task_bda2c599",
+      "type": "design:database_schema",
+      "format": "json",
+      "filename": "db_schema_task_bda2c599.json",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/db_schema_task_bda2c599.json",
+      "timestamp": "2026-06-12T00:33:30.040340+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ]
+      },
+      "size": 18,
+      "checksum": "2b44b39b8f8e91882d242d9384e33d5b3dfc03946a4c8880e17846e7e8879be1",
+      "mime_type": "application/json",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "api_contracts_task_bda2c599",
+      "type": "design:api_contracts",
+      "format": "json",
+      "filename": "api_contracts_task_bda2c599.json",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/api_contracts_task_bda2c599.json",
+      "timestamp": "2026-06-12T00:33:30.040971+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ]
+      },
+      "size": 2,
+      "checksum": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mime_type": "application/json",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "tech_stack_task_bda2c599",
+      "type": "design:technology_stack",
+      "format": "json",
+      "filename": "tech_stack_task_bda2c599.json",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/tech_stack_task_bda2c599.json",
+      "timestamp": "2026-06-12T00:33:30.041288+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ]
+      },
+      "size": 520,
+      "checksum": "28e3a5002b7598f35bb09cad92b08318f9572fe0a09a184b53d4e68a21695ce8",
+      "mime_type": "application/json",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "activity_diagram_1_task_bda2c599",
+      "type": "design:activity_diagram",
+      "format": "plantuml",
+      "filename": "activity_diagram_1.puml",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/activity_diagram_1.puml",
+      "timestamp": "2026-06-12T00:33:52.932177+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "activity_diagram_1.puml"
+      },
+      "size": 245,
+      "checksum": "c81cd63aa0ed89604cf0f619580a5684807b19b86d6a195735db5e81cc593891",
+      "mime_type": "application/octet-stream",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "activity_gen_1_task_bda2c599",
+      "type": "design:activity_diagram",
+      "format": "plantuml",
+      "filename": "activity_diagram_1_gen.puml",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/activity_diagram_1_gen.puml",
+      "timestamp": "2026-06-12T00:33:52.932980+00:00",
+      "metadata": {
+        "generated_by": "diagrams.activity_diagram",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "activity_diagram_1_gen.puml"
+      },
+      "size": 259,
+      "checksum": "58cf68c118f927472cb399d8ca73968bc288713e683d407c4bc44f54963c1664",
+      "mime_type": "application/octet-stream",
+      "workflow_id": "task_bda2c599"
+    },
+    {
+      "id": "usecase_diagram_task_bda2c599",
+      "type": "design:usecase_diagram",
+      "format": "plantuml",
+      "filename": "usecase_diagram.puml",
+      "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/02_design/usecase_diagram.puml",
+      "timestamp": "2026-06-12T00:33:53.791457+00:00",
+      "metadata": {
+        "generated_by": "DesignAgent",
+        "provenance": [
+          "task_bda2c599"
+        ],
+        "filename": "usecase_diagram.puml"
+      },
+      "size": 240,
+      "checksum": "5d8cc97cb97bb63c69fdeeee2d47c883001421b9d41bafda91dffc00265ddf6c",
+      "mime_type": "application/octet-stream",
+      "workflow_id": "task_bda2c599"
+    }
+  ]
+}

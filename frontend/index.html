@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevAgent — 统一软件工程智能体</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2300d4aa'/><text x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='%230a0e1a'>D</text></svg>">
+<link rel="stylesheet" href="css/devagent.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">D</div>
+      <div class="sidebar-title">Dev<span>Agent</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">概览</div>
+      <div class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">📊</span> 仪表盘
+      </div>
+      <div class="nav-item" data-view="task-create">
+        <span class="nav-icon">➕</span> 创建任务
+      </div>
+      <div class="nav-item" data-view="pipeline">
+        <span class="nav-icon">🔄</span> 流水线执行
+      </div>
+
+      <div class="nav-section">开发阶段</div>
+      <div class="nav-item" data-view="requirements">
+        <span class="nav-icon">📋</span> 需求分析
+      </div>
+      <div class="nav-item" data-view="high-design">
+        <span class="nav-icon">🏗️</span> 总体设计
+      </div>
+      <div class="nav-item" data-view="detail-design">
+        <span class="nav-icon">📐</span> 详细设计
+      </div>
+      <div class="nav-item" data-view="implementation">
+        <span class="nav-icon">💻</span> 代码实现
+      </div>
+      <div class="nav-item" data-view="testing">
+        <span class="nav-icon">🧪</span> 测试执行
+      </div>
+      <div class="nav-item" data-view="debug-repair">
+        <span class="nav-icon">🐛</span> 调试修复
+      </div>
+
+      <div class="nav-section">交互与输出</div>
+      <div class="nav-item" data-view="interaction">
+        <span class="nav-icon">💬</span> 实时交互
+        <span class="nav-badge" id="nav-ws-badge" style="display:none;">●</span>
+      </div>
+      <div class="nav-item" data-view="review-center">
+        <span class="nav-icon">✅</span> 审核中心
+        <span class="nav-badge" id="nav-review-badge" style="display:none;"></span>
+      </div>
+      <div class="nav-item" data-view="run-replay">
+        <span class="nav-icon">⏪</span> 执行回放
+      </div>
+      <div class="nav-item" data-view="reports">
+        <span class="nav-icon">📦</span> 报告文档
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">检查中...</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn btn-icon mobile-menu-btn" id="mobile-menu-btn">☰</button>
+        <h1 class="view-title" id="view-title">仪表盘</h1>
+        <span class="view-breadcrumb" id="view-breadcrumb">DevAgent</span>
+      </div>
+      <div class="topbar-right">
+        <span style="font-size:0.8rem;color:var(--text-muted);" id="clock"></span>
+        <button class="btn btn-sm" onclick="App.navigate('dashboard')">🏠</button>
+        <button class="btn btn-sm" onclick="window.open('/docs', '_blank')">📖 API 文档</button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="content-area" id="content-area">
+      <div class="hero">
+        <h1>DevAgent 统一软件工程智能体</h1>
+        <p>基于大语言模型的自主软件工程平台 — 从需求到交付，全流程自动化</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="App.navigate('task-create')">🚀 开始新任务</button>
+          <button class="btn btn-lg" onclick="App.navigate('requirements')">📋 查看需求分析</button>
+          <button class="btn btn-lg" onclick="App.navigate('high-design')">🏗️ 查看设计</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:40px;text-align:left;">
+          <div class="card" style="text-align:center;padding:24px 16px;">
+            <div style="font-size:2rem;">🤖</div>
+            <div style="font-weight:600;margin-top:8px;">ReAct 自主引擎</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">Think → Act → Observe</div>
+          </div>
+          <div class="card" style="text-align:center;padding:24px 16px;">
+            <div style="font-size:2rem;">🔧</div>
+            <div style="font-weight:600;margin-top:8px;">30+ 工具</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">代码/搜索/GitHub</div>
+          </div>
+          <div class="card" style="text-align:center;padding:24px 16px;">
+            <div style="font-size:2rem;">👥</div>
+            <div style="font-weight:600;margin-top:8px;">实时审核</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">人工+LLM双审</div>
+          </div>
+          <div class="card" style="text-align:center;padding:24px 16px;">
+            <div style="font-size:2rem;">📊</div>
+            <div style="font-weight:600;margin-top:8px;">可视化图表</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;">类图/时序图/DFD</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/diagrams.js"></script>
+<script src="js/fsm.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Component Scripts -->
+<script src="js/components/dashboard.js"></script>
+<script src="js/components/task-creator.js"></script>
+<script src="js/components/pipeline.js"></script>
+<script src="js/components/requirements.js"></script>
+<script src="js/components/design.js"></script>
+<script src="js/components/implementation.js"></script>
+<script src="js/components/debug-repair.js"></script>
+<script src="js/components/interaction.js"></script>
+<script src="js/components/reports.js"></script>
+<script src="js/components/review-center.js"></script>
+<script src="js/components/run-replay.js"></script>
+
+<script>
+// Clock update
+function updateClock() {
+  const el = document.getElementById('clock');
+  if (el) el.textContent = new Date().toLocaleString('zh-CN', {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.altKey) {
+    const views = {
+      'd': 'dashboard', 'n': 'task-create', 'p': 'pipeline',
+      'r': 'requirements', 'h': 'high-design', 'l': 'detail-design',
+      'i': 'implementation', 't': 'testing', 'b': 'debug-repair',
+      'c': 'interaction', 'o': 'reports',
+    };
+    const view = views[e.key];
+    if (view) { e.preventDefault(); App.navigate(view); }
+  }
+});
+
+// Update WS badge in sidebar
+setInterval(() => {
+  const badge = document.getElementById('nav-ws-badge');
+  if (badge) {
+    badge.style.display = App.wsClient?.connected ? 'inline' : 'none';
+  }
+}, 2000);
+</script>
+
+</body>
+</html>

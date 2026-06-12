@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant User
+    participant CLI
+    participant Calculator
+    User->>CLI: request history
+    CLI->>Calculator: get_history()
+    Calculator-->>CLI: list of CalculationRecord
+    CLI-->>User: display history

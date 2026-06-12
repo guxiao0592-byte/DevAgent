@@ -1,0 +1,287 @@
+# DevAgent Pipeline Configuration
+# Defines each phase's contract: inputs, outputs, validators, and failure strategy.
+#
+# Phase order: requirements → design → implementation → testing → [repair] → delivery
+
+pipeline:
+  name: "DevAgent Full Pipeline"
+  version: "1.0"
+  default_retry: 1
+
+phases:
+  # ======================================================================
+  # Phase 1: Requirements Analysis
+  # ======================================================================
+  requirements:
+    display_name: "需求分析"
+    tool: analyze_requirements
+    output_dir: 01_requirements
+    description: "Analyze input, extract domain model, FRs, NFRs, use cases"
+
+    required_artifacts:
+      - path: requirement_specification.md
+        type: markdown
+        description: "IEEE 830 SRS document"
+      - path: structured_requirements.json
+        type: json
+        description: "Structured FR/NFR/use cases data"
+      - path: index.json
+        type: manifest
+        description: "Phase artifact index"
+
+    optional_artifacts:
+      - path: "*.puml"
+        type: diagram
+        description: "Use case / activity diagrams"
+
+    validators:
+      - markdown_structure
+      - json_schema
+      - artifact_count_min:3
+
+    retry:
+      max_attempts: 2
+      on_failure: revise_with_feedback
+
+  # ======================================================================
+  # Phase 2: Architecture Design
+  # ======================================================================
+  design:
+    display_name: "架构设计"
+    tool: design_architecture
+    output_dir: 02_design
+    description: "C4 architecture, class diagram, ER diagram, sequence diagrams"
+
+    required_artifacts:
+      - path: design_spec.md
+        type: markdown
+        description: "IEEE 1016 SDD document"
+      - path: "*.mmd"
+        type: diagram
+        description: "Mermaid diagram source files"
+        min_count: 2
+      - path: index.json
+        type: manifest
+        description: "Phase artifact index"
+
+    optional_artifacts:
+      - path: "*.puml"
+        type: diagram
+      - path: "*.json"
+        type: structured_data
+
+    validators:
+      - markdown_structure
+      - diagram_syntax
+      - json_schema
+      - artifact_count_min:4
+
+    retry:
+      max_attempts: 2
+      on_failure: revise_with_feedback
+
+  # ======================================================================
+  # Phase 3: Code Generation
+  # ======================================================================
+  implementation:
+    display_name: "代码实现"
+    tool: generate_code
+    output_dir: 03_implementation
+    description: "Generate production code with type hints, docstrings, scaffold"
+
+    required_artifacts:
+      - path: src/
+        type: source_tree
+        description: "Source code directory"
+        min_files: 1
+      - path: index.json
+        type: manifest
+        description: "Phase artifact index"
+
+    optional_artifacts:
+      - path: "*.py"
+        type: source
+      - path: requirements.txt
+        type: config
+      - path: pyproject.toml
+        type: config
+      - path: README.md
+        type: documentation
+
+    validators:
+      - syntax_check
+      - import_check
+      - ruff_lint
+      - artifact_count_min:2
+
+    retry:
+      max_attempts: 2
+      on_failure: repair_output
+
+  # ======================================================================
+  # Phase 4: Testing
+  # ======================================================================
+  testing:
+    display_name: "测试执行"
+    tool: test_run
+    output_dir: 04_tests
+    description: "Generate and execute pytest test suite"
+
+    required_artifacts:
+      - path: tests/
+        type: test_tree
+        description: "Test files directory"
+        min_files: 1
+      - path: index.json
+        type: manifest
+        description: "Phase artifact index"
+
+    optional_artifacts:
+      - path: test_report.json
+        type: test_report
+      - path: "*.py"
+        type: test_source
+
+    validators:
+      - syntax_check
+      - pytest_run
+      - coverage_min:60
+      - artifact_count_min:2
+
+    retry:
+      max_attempts: 2
+      on_failure: repair_output
+
+  # ======================================================================
+  # Phase 5: Repair (conditional — triggered on test failure)
+  # ======================================================================
+  repair:
+    display_name: "修复验证"
+    tool: repair_code
+    output_dir: 05_repair
+    description: "Debug failures, generate fix patches, verify with regression tests"
+    conditional: true
+    condition: test_failed
+
+    required_artifacts:
+      - path: index.json
+        type: manifest
+        description: "Phase artifact index"
+
+    optional_artifacts:
+      - path: "*.diff"
+        type: patch
+      - path: "*.md"
+        type: documentation
+      - path: "*.json"
+        type: structured_data
+
+    validators:
+      - artifact_count_min:2
+      - syntax_check
+
+    retry:
+      max_attempts: 1
+      on_failure: skip_with_warning
+
+  # ======================================================================
+  # Phase 6: Delivery (final report)
+  # ======================================================================
+  delivery:
+    display_name: "交付报告"
+    tool: generate_report
+    output_dir: 06_reports
+    description: "Generate executive report, quality dashboard, artifact manifest"
+
+    required_artifacts:
+      - path: executive_report.md
+        type: markdown
+        description: "Final executive report"
+      - path: index.json
+        type: manifest
+        description: "Final artifact manifest"
+
+    optional_artifacts:
+      - path: "*.json"
+        type: structured_data
+      - path: "*.md"
+        type: documentation
+
+    validators:
+      - markdown_structure
+      - artifact_count_min:2
+      - report_completeness
+
+    retry:
+      max_attempts: 1
+      on_failure: skip_with_warning
+
+# ==============================================================================
+# Failure Strategy Definitions
+# ==============================================================================
+failure_strategies:
+  retry:
+    description: "Re-run the phase tool"
+  revise_with_feedback:
+    description: "Ask LLM to revise output with validation error feedback"
+  repair_output:
+    description: "Attempt automatic output repair"
+  skip_with_warning:
+    description: "Skip phase with warning, continue pipeline"
+  fail_fast:
+    description: "Abort entire pipeline immediately"
+  manual_intervention:
+    description: "Pause and wait for human decision"
+
+# ==============================================================================
+# Global Quality Gates
+# ==============================================================================
+quality_gates:
+  min_overall_coverage: 60
+  max_lint_errors: 0
+  require_all_required_artifacts: true
+  require_review_approval: false
+
+# ==============================================================================
+# Validator Definitions
+# ==============================================================================
+validator_specs:
+  markdown_structure:
+    description: "Verify .md files have headers, sections, and minimum content"
+    checks: ["has_h1", "min_sections:3", "min_chars:200"]
+
+  json_schema:
+    description: "Validate JSON files parse and have expected top-level keys"
+    checks: ["valid_json", "non_empty"]
+
+  diagram_syntax:
+    description: "Validate Mermaid/PUML syntax"
+    checks: ["valid_mermaid_or_puml", "min_chars:30"]
+
+  syntax_check:
+    description: "Python syntax check via AST"
+    checks: ["python_ast_valid"]
+
+  import_check:
+    description: "Verify all imports resolve"
+    checks: ["imports_resolvable"]
+
+  ruff_lint:
+    description: "Run Ruff linter with zero-error policy"
+    checks: ["ruff_errors:0"]
+
+  pytest_run:
+    description: "Run pytest and verify tests pass"
+    checks: ["min_collected:1", "all_pass"]
+
+  coverage_min:
+    description: "Check test coverage meets minimum threshold"
+    checks: ["coverage >= threshold"]
+
+  artifact_count_min:
+    description: "Verify minimum number of output files"
+    checks: ["file_count >= min"]
+
+  report_completeness:
+    description: "Check final report has all required sections"
+    checks: ["has_summary", "has_metrics", "has_artifacts_list"]

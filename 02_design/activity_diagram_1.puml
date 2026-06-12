@@ -1,0 +1,14 @@
+@startuml
+start
+:User enters first operand;
+:User selects operator;
+:User enters second operand;
+if (Division by zero?) then (yes)
+  :Display error message;
+else (no)
+  :Compute result;
+  :Record in history;
+  :Display result;
+endif
+stop
+@enduml

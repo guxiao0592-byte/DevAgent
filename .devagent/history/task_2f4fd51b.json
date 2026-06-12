@@ -1,0 +1,15 @@
+{
+  "task_id": "task_2f4fd51b",
+  "task_type": "agentic",
+  "task_description": "Call request_review(phase=\"delivery\",title=\"REST\",summary=\"test\",files_changed=[\"01_requirements/requirement_specification.md\"],self_assessment=\"ok\"). After approved: submit.",
+  "status": "COMPLETED",
+  "created_at": "2026-06-02T22:20:07.249603",
+  "completed_at": "",
+  "iterations": 5,
+  "files_modified": [],
+  "test_passed": 30,
+  "test_failed": 0,
+  "errors": [],
+  "duration_sec": 791.3,
+  "event_count": 0
+}

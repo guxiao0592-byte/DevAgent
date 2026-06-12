@@ -1,0 +1,133 @@
+{
+  "version": 2,
+  "task_id": "task_4fa80379",
+  "task_type": "agentic",
+  "workspace": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent",
+  "task_description": "Analyze the codebase",
+  "current_iteration": 5,
+  "max_iterations": 60,
+  "status": "FAILED",
+  "action_history": [
+    {
+      "thought": "The user wants me to analyze the codebase. This is an exploration task. Let me start by understanding the project structure, key files, and how the system works. I'll read several important files to build a comprehensive understanding.\n\nLet me begin by reading the main entry points, configuration files, and core modules to understand the architecture.",
+      "tool": "file_read",
+      "params": {
+        "path": "README.md",
+        "limit": 100
+      },
+      "iteration": 1,
+      "timestamp": "2026-06-12T10:17:01.088322"
+    },
+    {
+      "thought": "The user wants me to analyze the codebase. This is an EXPLORATION mode task. I need to understand the DevAgent project structure, its key components, architecture, and how everything fits together. Let me start by exploring the workspace systematically.\n\nLet me first look at the project structure more carefully, then read key files to understand the architecture.",
+      "tool": "file_list",
+      "params": {
+        "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent",
+        "depth": 3
+      },
+      "iteration": 2,
+      "timestamp": "2026-06-12T10:17:03.078273"
+    },
+    {
+      "thought": "The user wants me to analyze the codebase. I'm in EXPLORATION mode. Let me first understand the project structure better by reading key files. I'll start by examining the main entry points, core modules, and configuration files to understand the architecture.\n\nLet me read several key files to understand the codebase structure and functionality.",
+      "tool": "file_read",
+      "params": {
+        "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/devagent/cli/main.py",
+        "limit": 100
+      },
+      "iteration": 3,
+      "timestamp": "2026-06-12T10:17:04.940978"
+    },
+    {
+      "thought": "The user wants me to analyze the codebase. Let me start by exploring the workspace structure to understand the project layout, then examine key files to understand the architecture and functionality.",
+      "tool": "file_list",
+      "params": {
+        "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent",
+        "depth": 1
+      },
+      "iteration": 4,
+      "timestamp": "2026-06-12T10:17:06.621280"
+    },
+    {
+      "thought": "用户要求\"Analyze the codebase\"（分析代码库）。根据系统提示，我处于EXPLORATION MODE（探索模式），需要先理解代码库的结构和内容。我已经看到了项目的基本结构，现在需要更深入地探索关键模块来理解整个DevAgent系统的架构和工作原理。\n\n让我先查看一些核心文件来理解系统架构。",
+      "tool": "file_read",
+      "params": {
+        "path": "/Users/guxiao/Downloads/项目文档/软件工程/DevAgent/devagent/agentic/core.py",
+        "limit": 100
+      },
+      "iteration": 5,
+      "timestamp": "2026-06-12T10:17:08.674427"
+    }
+  ],
+  "observation_history": [
+    {
+      "success": true,
+      "output": "--- README.md (lines 1-100 of 282) ---\n   1|# DevAgent — 统一软件工程智能体\n   2|\n   3|> 基于大语言模型的自主软件工程智能体。支持全流程开发（需求分析→架构设计→代码生成→测试→修复），内置实时交互审核系统，中文文档输出。\n   4|\n   5|## 特性\n   6|\n   7|- **统一 ReAct 引擎**：所有任务通过同一执行引擎，Agent 自主 Think → Act → Observe\n   8|- **30 种专业工具**：8 种 Pipeline 工具 + 14 种代码操作工具 + 5 种 GitHub 工具 + 3 种交互审核工具\n   9|- **实时人工交互**：WebSocket 双向通信、VSCode 弹窗审核、CLI 终端交互、REST API\n  10|- **阶段质量审核**：Agent 完成每个阶段后提交人工审核，支持批准/要求修改/拒绝\n  11|- **LLM 质量评估**：10 维自动化评分（正确性/结构/类型安全/文档/测试覆盖等）\n  12|- **中文文档输出**：生成的报告和文档使用中文\n  13|- **工程级产物**：完整项目脚手架、类型标注、docstring、pytest 测试套件\n  14|- **双模型**：DeepSeek + OpenAI，支持 SSE 流式输出\n  15|\n  16|## 快速开始\n  17|\n  18|```bash\n  19|cd DevAgent\n  20|pip install -r requirements.txt\n  21|pip install -e \".[all]\"\n  22|```\n  23|\n  24|配置 `devagent/configs/config.yaml`：\n  25|\n  26|```yaml\n  27|model:\n  28|  provider: deepseek\n  29|  deepseek:\n  30|    api_key: sk-xxx\n  31|    model: deepseek-chat\n  32|```\n  33|\n  34|```bash\n  35|# 准备需求文件\n  36|echo \"# Calculator App Requirements\n  37|Build a calculator supporting +, -, *, / with error handling.\" > requirements.md\n  38|\n  39|# 全流程开发\n  40|agent --mode full --input requirements.md\n  41|```\n  42|\n  43|---\n  44|\n  45|## CLI 用法\n  46|\n  47|### 任务模式\n  48|\n  49|| 命令 | 功能 |\n  50||------|------|\n  51|| `agent --mode full --input requirements.md` | 全流程：分析→设计→编码→测试→交付 |\n  52|| `agent --mode design --input requirements.md` | 仅分析+设计 |\n  53|| `agent --mode implement --input requirements.md` | 分析→设计→编码→测试 |\n  54|| `agent --mode repair --workspace ./src/` | Bug 修复 |\n  55|| `agent --mode agentic` | 自主模式 |\n  56|| `agent --mode test --workspace ./src/` | 测试生成+执行 |\n  57|| `agent --mode debug --workspace ./src/` | 调试分析 |\n  58|\n  59|### 参数\n  60|\n  61|| 参数 | 说明 | 默认值 |\n  62||------|------|--------|\n  63|| `--mode, -m` | 任务模式 | `agentic` |\n  64|| `--input, -i` | 输入文件 | — |\n  65|| `--workspace, -w` | 工作空间 | `.` |\n  66|| `--output, -o` | 产物目录 | `./outputs` |\n  67|| `--interactive, -I` | `full`/`approval`/`observe`/`off` | `off` |\n  68|| `--provider` | `openai`/`deepseek` | 配置文件 |\n  69|| `--verbose, -v` | 详细输出 | — |\n  70|\n  71|### 交互模式\n  72|\n  73|```bash\n  74|# 完整交互：审批 + 阶段审核 + Agent提问\n  75|agent --mode full --input requirements.md --interactive full\n  76|\n  77|# 仅审批危险操作\n  78|agent --mode repair --workspace ./src/ --interactive approval\n  79|```\n  80|\n  81|交互模式下，Agent 每个阶段完成后等待人工审核。终端用户直接在命令行输入，VSCode 用户通过弹窗操作。\n  82|\n  83|---\n  84|\n  85|## API 服务\n  86|\n  87|```bash\n  88|# 启动\n  89|devagent-api\n  90|\n  91|# 指定交互模式\n  92|devagent-api --interactive full\n  93|```\n  94|\n  95|| 地址 | 说明 |\n  96||------|------|\n  97|| `http://127.0.0.1:8911/docs` | Swagger 文档 |\n  98|| `http://127.0.0.1:8911/dashboard` | Web 仪表盘 |\n  99|| `ws://127.0.0.1:8911/api/v2/tasks/{id}/interactive` | 双向 WebSocket |\n 100|",
+      "error": "",
+      "structured": {
+        "path": "README.md",
+        "total_lines": 282,
+        "shown": 100
+      },
+      "duration_ms": 1.4998912811279297,
+      "iteration": 1,
+      "timestamp": "2026-06-12T10:17:01.089884"
+    },
+    {
+      "success": true,
+      "output": "--- . (182 files, 52 dirs) ---\n01_requirements/\n  execution_plan.json (7KB)\n  execution_plan.md (5KB)\n  index.json (71KB)\n  requirement_specification.md (9KB)\n  structured_requirements.json (11KB)\n02_design/\n  diagrams/\n    activity_1.png (8KB)\n    activity_Perform_Basic_Calculation.png (8KB)\n    activity_Perform_Basic_Calculation_gen.png (8KB)\n    class_diagram.png (4KB)\n    context_diagram.png (11KB)\n    deployment_diagram.png (11KB)\n    dfd_level_0.png (12KB)\n    er_diagram.png (14KB)\n    sequence_Chain_Calculation.png (8KB)\n    usecase_diagram.png (6KB)\n  activity_diagram_1.puml (245B)\n  activity_diagram_1_gen.puml (259B)\n  api_contracts_task_bda2c599.json (2B)\n  class_diagram.mmd (834B)\n  db_schema_task_bda2c599.json (18B)\n  design_md_task_bda2c599.md (8KB)\n  er_diagram.mmd (158B)\n  index.json (8KB)\n  sequence_diagram_1.mmd (343B)\n  sequence_diagram_2.mmd (396B)\n  sequence_diagram_3.mmd (233B)\n  tech_stack_task_bda2c599.json (520B)\n  usecase_diagram.puml (240B)\ndevagent/\n  agent_core/\n    __init__.py (0B)\n    config_loader.py (1KB)\n    langgraph_workflow.py (8KB)\n    llm_client.py (10KB)\n    router.py (2KB)\n    schemas.py (3KB)\n    state.py (3KB)\n    workflow.py (26KB)\n  agentic/\n    __init__.py (3KB)\n    action_schema.py (9KB)\n    action_validator.py (8KB)\n    artifact_contract.py (15KB)\n    context.py (52KB)\n    core.py (39KB)\n    events.py (6KB)\n    experience.py (13KB)\n    fault_locator.py (49KB)\n    interaction.py (33KB)\n    multi_agent.py (13KB)\n    multimodal.py (11KB)\n    observability.py (23KB)\n    persistence.py (17KB)\n    pipeline_runner.py (35KB)\n    pipeline_tools.py (16KB)\n    pipeline_validator.py (7KB)\n    planning.py (12KB)\n    review_gate.py (35KB)\n    sandbox.py (15KB)\n    session.py (11KB)\n    state.py (4KB)\n    state_graph.py (31KB)\n    structured_output.py (14KB)\n    thread_channel.py (10KB)\n    tools.py (74KB)\n    validation.py (19KB)\n    verification.py (13KB)\n  agents/\n    __init__.py (0B)\n    base_agent.py (6KB)\n    code_agent.py (23KB)\n    debug_agent.py (10KB)\n    design_agent.py (25KB)\n    planner_agent.py (8KB)\n    repair_agent.py (11KB)\n    requirement_agent.py (12KB)\n    review_agent.py (5KB)\n    test_agent.py (29KB)\n  api/\n    __init__.py (0B)\n    app.py (70KB)\n    ide_server.py (3KB)\n  benchmarks/\n    ad_cases/\n      book_lending.md (768B)\n      bug_tracker.md (1KB)\n      cinema_booking.md (857B)\n      course_selection.md (814B)\n    dr_cases/\n      boundary_bug/\n      logic_bug/\n      null_bug/\n      path_bug/\n    it_cases/\n      bank_account.md (726B)\n      student_grade.md (504B)\n      text_stats.md (520B)\n      todo_app.md (550B)\n    __init__.py (0B)\n    benchmark_runner.py (27KB)\n    pipeline_evaluator.py (39KB)\n    swebench_adapter.py (2KB)\n  cli/\n    __init__.py (0B)\n    main.py (9KB)\n  configs/\n    config.yaml (3KB)\n    pipeline.yaml (8KB)\n  lsp/\n    __init__.py (75B)\n    server.py (14KB)\n  reporting/\n    __init__.py (1KB)\n    diagram_compiler.py (9KB)\n    diagram_ir.py (4KB)\n    diagram_renderer_service.py (16KB)\n    diagrams.py (25KB)\n    executive.py (10KB)\n    ieee1016.py (13KB)\n    ieee830.py (13KB)\n    renderer.py (18KB)\n    templates.py (9KB)\n  tests/\n  tools/\n    __init__.py (0B)\n    artifact_registry.py (5KB)\n    diagram_validator.py (3KB)\n    file_tool.py (2KB)\n    patch_tool.py (2KB)\n    quality.py (5KB)\n    sandbox_runner.py (3KB)\n    static_analyzer.py (8KB)\n    test_runner.py (11KB)\n  __init__.py (77B)\ndevagent.egg-info/\n  PKG-INFO (10KB)\n  SOURCES.txt (1KB)\n  dependency_links.txt (1B)\n  entry_points.txt (166B)\n  requires.txt (249B)\n  top_level.txt (15B)\ndocker/\n  nginx.conf (1KB)\neclipse_plugin/\n  META-INF/\n    MANIFEST.MF (575B)\n  icons/\n  src/\n    com/\n      devagent/\n  build.properties (128B)\n  plugin.xml (3KB)\nexample/\n  requirements.md (942B)\nexamples/\n  buggy_demo/\n    src/\n      __init__.py (0B)\n      math_ops.py (2KB)\n    tests/\n      __init__.py (0B)\n      conftest.py (101B)\n      test_math_ops.py (3KB)\n    README.md (2KB)\nfrontend/\n  assets/\n  css/\n    devagent.css (25KB)\n  js/\n    components/\n      dashboard.js (6KB)\n      debug-repair.js (5KB)\n      design.js (12KB)\n      implementation.js (10KB)\n      interaction.js (14KB)\n      pipeline.js (13KB)\n      reports.js (8KB)\n      requirements.js (9KB)\n      review-center.js (7KB)\n      run-replay.js (8KB)\n      task-creator.js (13KB)\n    api.js (10KB)\n    app.js (8KB)\n    diagrams.js (20KB)\n    fsm.js (5KB)\n    utils.js (8KB)\n  index.html (7KB)\nintellij_plugin/\n  gradle/\n    wrapper/\n  src/\n    main/\n      java/\n      resources/\n  build.gradle (915B)\n  gradle.properties (51B)\n  settings.gradle (39B)\ntests/\n  e2e/\n    test_api_flows.py (7KB)\n  integration/\n    test_code_quality_integration.py (1KB)\n    test_design_artifact_registry.py (2KB)\n  __init__.py (0B)\n  test_agentic_context.py (18KB)\n  test_agentic_tools.py (19KB)\n  test_experience.py (5KB)\n  test_fault_locator.py (18KB)\n  test_multi_agent.py (4KB)\n  test_multimodal.py (4KB)\n  test_observability.py (11KB)\n  test_planning.py (3KB)\n  test_sandbox.py (2KB)\n  test_state.py (2KB)\n  test_state_graph.py (9KB)\n  test_tools.py (3KB)\n  test_validation.py (8KB)\n  test_verification.py (3KB)\nvscode_extension/\n  src/\n    extension.js (28KB)\n  package-lock.json (4KB)\n  package.json (10KB)\nDockerfile (4KB)\nREADME.md (8KB)\nagent (257B)\ndevagent-3.4.tar.gz (20B)\ndocker-compose.yml (2KB)\npyproject.toml (1KB)\nrequirements.txt (627B)\nsetup.py (1KB)",
+      "error": "",
+      "structured": {
+        "path": ".",
+        "files": 182,
+        "dirs": 52
+      },
+      "duration_ms": 5.878686904907227,
+      "iteration": 2,
+      "timestamp": "2026-06-12T10:17:03.084231"
+    },
+    {
+      "success": true,
+      "output": "--- devagent/cli/main.py (lines 1-100 of 278) ---\n   1|\"\"\"Command-line interface for DevAgent — Unified Architecture.\n   2|\n   3|All task modes (design/implement/repair/full) are routed through the V2\n   4|ReAct loop with full pipeline tool support. The unified architecture uses\n   5|a single execution engine for all workflows.\n   6|\"\"\"\n   7|\n   8|import argparse\n   9|import sys\n  10|import os\n  11|\n  12|# ============================================================================\n  13|# Mode descriptors — map legacy task names to agent instructions\n  14|# ============================================================================\n  15|\n  16|MODE_INSTRUCTIONS = {\n  17|    \"design\": \"Analyze the project in the input file. Call analyze_requirements then design_architecture. Submit when done.\",\n  18|    \"implement\": \"Build the project described in the input file. Call analyze_requirements, design_architecture, generate_code, then test_run. If tests pass, submit.\",\n  19|    \"repair\": \"Fix bugs in the workspace. Use test_run to reproduce, debug_issue to analyze, repair_code to fix. Submit when tests pass.\",\n  20|    \"full\": \"Build the complete project from the input file: analyze_requirements → design_architecture → generate_code → test_run → (debug_issue+repair_code if needed) → submit.\",\n  21|    \"agentic\": \"Complete the task using available tools. Choose the best approach.\",\n  22|    \"test\": \"Generate and run tests for the code in the workspace. Use generate_tests or test_run.\",\n  23|    \"debug\": \"Debug failures in the codebase. Use test_run, debug_issue, then repair_code.\",\n  24|}\n  25|\n  26|\n  27|def create_parser() -> argparse.ArgumentParser:\n  28|    \"\"\"Create the CLI argument parser — unified architecture.\"\"\"\n  29|    parser = argparse.ArgumentParser(\n  30|        prog=\"agent\",\n  31|        description=\"DevAgent: Unified LLM-based Software Engineering Agent\",\n  32|        formatter_class=argparse.RawDescriptionHelpFormatter,\n  33|        epilog=\"\"\"\n  34|Examples:\n  35|  # Full end-to-end development\n  36|  %(prog)s --mode full --input requirements.md --output outputs/project\n  37|\n  38|  # Analyze and design only\n  39|  %(prog)s --mode design --input requirements.md --output outputs/design\n  40|\n  41|  # Fix bugs in existing code\n  42|  %(prog)s --mode repair --workspace ./buggy_app/ --output outputs/repair\n  43|\n  44|  # Interactive mode (human-in-the-loop)\n  45|  %(prog)s --input requirements.md --interactive full\n  46|\n  47|  # Start API server (WebSocket + REST)\n  48|  devagent-api --interactive full\n  49|        \"\"\"\n  50|    )\n  51|\n  52|    parser.add_argument(\n  53|        \"--mode\", \"-m\",\n  54|        choices=[\"design\", \"implement\", \"test\", \"debug\", \"repair\", \"full\", \"agentic\"],\n  55|        default=\"agentic\",\n  56|        help=(\n  57|            \"Task mode (default: agentic). All modes use the unified ReAct engine.\\n\"\n  58|            \"  design    — Requirement analysis + architecture design\\n\"\n  59|            \"  implement — Code generation + testing\\n\"\n  60|            \"  repair    — Debug + fix (bug fixing)\\n\"\n  61|            \"  full      — Complete end-to-end pipeline\\n\"\n  62|            \"  agentic   — Autonomous determination of approach\\n\"\n  63|            \"  test      — Test generation + execution\\n\"\n  64|            \"  debug     — Debug + root cause analysis\"\n  65|        )\n  66|    )\n  67|\n  68|    parser.add_argument(\n  69|        \"--input\", \"-i\", default=\"\",\n  70|        help=\"Input file path (requirements or design document)\"\n  71|    )\n  72|\n  73|    parser.add_argument(\n  74|        \"--workspace\", \"-w\", default=\".\",\n  75|        help=\"Workspace directory (default: current directory)\"\n  76|    )\n  77|\n  78|    parser.add_argument(\n  79|        \"--output\", \"-o\", default=\"./outputs\",\n  80|        help=\"Output directory for artifacts (default: ./outputs)\"\n  81|    )\n  82|\n  83|    parser.add_argument(\n  84|        \"--max-iterations\", type=int, default=50,\n  85|        help=\"Maximum ReAct loop iterations (default: 50)\"\n  86|    )\n  87|\n  88|    parser.add_argument(\n  89|        \"--config\", default=\"\",\n  90|        help=\"Path to custom config YAML file\"\n  91|    )\n  92|\n  93|    parser.add_argument(\n  94|        \"--provider\", choices=[\"openai\", \"deepseek\"], default=\"\",\n  95|        help=\"Override LLM provider\"\n  96|    )\n  97|\n  98|    parser.add_argument(\n  99|        \"--interactive\", \"-I\",\n 100|        choices=[\"full\", \"approval\", \"observe\", \"off\"],",
+      "error": "",
+      "structured": {
+        "path": "devagent/cli/main.py",
+        "total_lines": 278,
+        "shown": 100
+      },
+      "duration_ms": 0.49304962158203125,
+      "iteration": 3,
+      "timestamp": "2026-06-12T10:17:04.941512"
+    },
+    {
+      "success": true,
+      "output": "--- . (58 files, 36 dirs) ---\n01_requirements/\n  execution_plan.json (7KB)\n  execution_plan.md (5KB)\n  index.json (71KB)\n  requirement_specification.md (9KB)\n  structured_requirements.json (11KB)\n02_design/\n  diagrams/\n  activity_diagram_1.puml (245B)\n  activity_diagram_1_gen.puml (259B)\n  api_contracts_task_bda2c599.json (2B)\n  class_diagram.mmd (834B)\n  db_schema_task_bda2c599.json (18B)\n  design_md_task_bda2c599.md (8KB)\n  er_diagram.mmd (158B)\n  index.json (8KB)\n  sequence_diagram_1.mmd (343B)\n  sequence_diagram_2.mmd (396B)\n  sequence_diagram_3.mmd (233B)\n  tech_stack_task_bda2c599.json (520B)\n  usecase_diagram.puml (240B)\ndevagent/\n  agent_core/\n  agentic/\n  agents/\n  api/\n  benchmarks/\n  cli/\n  configs/\n  lsp/\n  reporting/\n  tests/\n  tools/\n  __init__.py (77B)\ndevagent.egg-info/\n  PKG-INFO (10KB)\n  SOURCES.txt (1KB)\n  dependency_links.txt (1B)\n  entry_points.txt (166B)\n  requires.txt (249B)\n  top_level.txt (15B)\ndocker/\n  nginx.conf (1KB)\neclipse_plugin/\n  META-INF/\n  icons/\n  src/\n  build.properties (128B)\n  plugin.xml (3KB)\nexample/\n  requirements.md (942B)\nexamples/\n  buggy_demo/\nfrontend/\n  assets/\n  css/\n  js/\n  index.html (7KB)\nintellij_plugin/\n  gradle/\n  src/\n  build.gradle (915B)\n  gradle.properties (51B)\n  settings.gradle (39B)\ntests/\n  e2e/\n  integration/\n  __init__.py (0B)\n  test_agentic_context.py (18KB)\n  test_agentic_tools.py (19KB)\n  test_experience.py (5KB)\n  test_fault_locator.py (18KB)\n  test_multi_agent.py (4KB)\n  test_multimodal.py (4KB)\n  test_observability.py (11KB)\n  test_planning.py (3KB)\n  test_sandbox.py (2KB)\n  test_state.py (2KB)\n  test_state_graph.py (9KB)\n  test_tools.py (3KB)\n  test_validation.py (8KB)\n  test_verification.py (3KB)\nvscode_extension/\n  src/\n  package-lock.json (4KB)\n  package.json (10KB)\nDockerfile (4KB)\nREADME.md (8KB)\nagent (257B)\ndevagent-3.4.tar.gz (20B)\ndocker-compose.yml (2KB)\npyproject.toml (1KB)\nrequirements.txt (627B)\nsetup.py (1KB)",
+      "error": "",
+      "structured": {
+        "path": ".",
+        "files": 58,
+        "dirs": 36
+      },
+      "duration_ms": 3.1919479370117188,
+      "iteration": 4,
+      "timestamp": "2026-06-12T10:17:06.624529"
+    },
+    {
+      "success": true,
+      "output": "--- devagent/agentic/core.py (lines 1-100 of 907) ---\n   1|\"\"\"ReAct Agentic Loop — the core of DevAgent V2.\n   2|\n   3|Implements the Think → Act → Observe cycle with LLM-driven decision making,\n   4|tool execution, context management, and structured termination.\n   5|\n   6|Refactored architecture:\n   7|  _execute_single_step()  → shared step execution (eliminates duplication)\n   8|  _handle_step_result()   → observation processing + side effects\n   9|  _run_agentic_loop()     → main loop, used by both execute_async and _run_standard_loop\n  10|\"\"\"\n  11|\n  12|import os\n  13|import json\n  14|import time\n  15|import asyncio\n  16|import re\n  17|from datetime import datetime\n  18|from typing import Optional\n  19|\n  20|from .tools import ToolRegistry, ToolResult\n  21|from .events import EventBus, EventType, DevAgentEvent, ConsoleEmitter, FileLogger\n  22|from .state import AgentLoopState\n  23|from .context import (\n  24|    ContextManager, PhaseDetector,\n  25|    HallucinationGuard, ContextualToolFilter\n  26|)\n  27|from .fault_locator import FaultLocalizationPipeline, FaultReport\n  28|from .validation import InstantValidator\n  29|from .observability import (\n  30|    StreamingServer, HumanInTheLoop, TaskHistoryManager, TaskRecord\n  31|)\n  32|from .planning import PlannerAgent, ExecutionPlan\n  33|from .experience import ExperienceStore, ExperienceInjector, ExperienceRecorder\n  34|from .sandbox import SandboxManager, ContainerSpec\n  35|from .verification import VerificationGate\n  36|from .interaction import (\n  37|    InteractionController, ProgressStreamer,\n  38|    UserCommand, CommandType,\n  39|    _set_active_controller,\n  40|)\n  41|from .session import SessionManager\n  42|from ..agent_core.llm_client import LLMClient\n  43|from ..agent_core.config_loader import load_config, get_llm_config\n  44|\n  45|\n  46|# ============================================================================\n  47|# Termination Checker\n  48|# ============================================================================\n  49|\n  50|class TerminationChecker:\n  51|    \"\"\"Checks if the agentic loop should stop.\"\"\"\n  52|\n  53|    def __init__(self, max_iterations: int = 50, stuck_window: int = 25):\n  54|        self.max_iterations = max_iterations\n  55|        self.stuck_window = stuck_window\n  56|\n  57|    def check(self, state: AgentLoopState,\n  58|              last_observation: Optional[dict] = None) -> tuple[bool, str]:\n  59|        if last_observation:\n  60|            if last_observation.get(\"structured\", {}).get(\"submitted\"):\n  61|                return True, \"agent_submitted\"\n  62|            output = (last_observation.get(\"output\", \"\") or \"\").lower()\n  63|            if \"cannot complete\" in output or \"unable to fix\" in output:\n  64|                return True, \"agent_declared_failure\"\n  65|\n  66|        tr = state.test_results\n  67|        if tr and tr.get(\"collected\", 0) > 0:\n  68|            if tr.get(\"failed\", 0) == 0 and tr.get(\"errors\", 0) == 0:\n  69|                return True, \"all_tests_pass\"\n  70|\n  71|        if state.current_iteration >= state.max_iterations:\n  72|            return True, \"max_iterations_reached\"\n  73|\n  74|        if self._is_stuck(state):\n  75|            return True, \"stuck_no_progress\"\n  76|\n  77|        if self._consecutive_errors(state, window=3):\n  78|            return True, \"consecutive_errors\"\n  79|\n  80|        return False, \"\"\n  81|\n  82|    def _is_stuck(self, state: AgentLoopState) -> bool:\n  83|        if state.current_iteration < self.stuck_window:\n  84|            return False\n  85|        recent = state.action_history[-self.stuck_window:]\n  86|        productive = {\n  87|            # Code modification\n  88|            \"file_edit\", \"file_write\", \"submit\", \"test_run\", \"shell_run\",\n  89|            # Pipeline tools (requirements/design/code generation are productive)\n  90|            \"plan_task\", \"analyze_requirements\", \"design_architecture\",\n  91|            \"generate_code\", \"generate_tests\", \"debug_issue\", \"repair_code\",\n  92|            \"generate_report\",\n  93|            # Interactive tools (review submission = progress)\n  94|            \"request_review\", \"ask_user\",\n  95|            # Discovery that returns results (grep/find are productive)\n  96|            \"grep_text\", \"grep_ast\", \"find_symbol\",\n  97|        }\n  98|        return all(a.get(\"tool\", \"\") not in productive for a in recent)\n  99|\n 100|    def _consecutive_errors(self, state: AgentLoopState, window: int = 3) -> bool:",
+      "error": "",
+      "structured": {
+        "path": "devagent/agentic/core.py",
+        "total_lines": 907,
+        "shown": 100
+      },
+      "duration_ms": 0.6799697875976562,
+      "iteration": 5,
+      "timestamp": "2026-06-12T10:17:08.675156"
+    }
+  ],
+  "modified_files": [],
+  "test_results": {},
+  "sub_tasks": [],
+  "current_sub_task": ""
+}

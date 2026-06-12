@@ -1,0 +1,422 @@
+{
+  "name": "devagent",
+  "displayName": "DevAgent",
+  "description": "Unified LLM-based Software Engineering Agent — Real-time IDE Integration",
+  "version": "3.0.0",
+  "publisher": "devagent",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "devagent",
+    "llm",
+    "ai",
+    "code generation",
+    "code analysis",
+    "agent"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "*",
+    "onCommand:devagent.analyzeRequirement",
+    "onCommand:devagent.generateCode",
+    "onCommand:devagent.repairBug",
+    "onCommand:devagent.fullPipeline",
+    "onCommand:devagent.runAgentic",
+    "onCommand:devagent.startApiServer"
+  ],
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1",
+    "ws": "^8.21.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "devagent.analyzeRequirement",
+        "title": "DevAgent: Analyze & Design",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "devagent.generateCode",
+        "title": "DevAgent: Generate Code + Tests",
+        "icon": "$(code)"
+      },
+      {
+        "command": "devagent.repairBug",
+        "title": "DevAgent: Debug & Repair",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "devagent.fullPipeline",
+        "title": "DevAgent: Full Pipeline (End-to-End)",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "devagent.runTests",
+        "title": "DevAgent: Run Tests",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "devagent.debugCode",
+        "title": "DevAgent: Debug Analysis",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "devagent.runAgentic",
+        "title": "DevAgent: Autonomous Agent",
+        "icon": "$(hubot)"
+      },
+      {
+        "command": "devagent.runWithConfig",
+        "title": "DevAgent: Select Task Mode...",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "devagent.startApiServer",
+        "title": "DevAgent: Start API Server",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "devagent.stopApiServer",
+        "title": "DevAgent: Stop API Server",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "devagent.approveReview",
+        "title": "DevAgent: Approve Review",
+        "icon": "$(check)"
+      },
+      {
+        "command": "devagent.reviseReview",
+        "title": "DevAgent: Request Changes",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "devagent.rejectReview",
+        "title": "DevAgent: Reject (Redo)",
+        "icon": "$(close)"
+      },
+      {
+        "command": "devagent.pauseAgent",
+        "title": "DevAgent: Pause Agent",
+        "icon": "$(debug-pause)"
+      },
+      {
+        "command": "devagent.resumeAgent",
+        "title": "DevAgent: Resume Agent",
+        "icon": "$(debug-start)"
+      },
+      {
+        "command": "devagent.abortAgent",
+        "title": "DevAgent: Abort Agent",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "devagent.showTaskHistory",
+        "title": "DevAgent: Task History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "devagent.analyzeCurrentFile",
+        "title": "DevAgent: Analyze Current File",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "devagent.openOutputDir",
+        "title": "DevAgent: Open Output Directory",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "devagent.clearDiagnostics",
+        "title": "DevAgent: Clear Diagnostics",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "devagent.startLsp",
+        "title": "DevAgent: Start Language Server",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "devagent.stopLsp",
+        "title": "DevAgent: Stop Language Server",
+        "icon": "$(debug-disconnect)"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "devagentMenu",
+        "label": "DevAgent"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "devagentMenu",
+          "group": "devagent",
+          "when": "editorTextFocus"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "devagentMenu",
+          "group": "devagent"
+        }
+      ],
+      "devagentMenu": [
+        {
+          "command": "devagent.analyzeCurrentFile",
+          "when": "editorTextFocus",
+          "group": "1_analysis"
+        },
+        {
+          "command": "devagent.analyzeRequirement",
+          "group": "1_analysis"
+        },
+        {
+          "command": "devagent.generateCode",
+          "group": "2_generation"
+        },
+        {
+          "command": "devagent.runTests",
+          "group": "3_testing"
+        },
+        {
+          "command": "devagent.debugCode",
+          "group": "3_testing"
+        },
+        {
+          "command": "devagent.repairBug",
+          "group": "3_testing"
+        },
+        {
+          "command": "devagent.fullPipeline",
+          "group": "4_pipeline"
+        },
+        {
+          "command": "devagent.runAgentic",
+          "group": "4_pipeline"
+        },
+        {
+          "command": "devagent.runWithConfig",
+          "group": "4_pipeline"
+        },
+        {
+          "command": "devagent.approveReview",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.reviseReview",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.rejectReview",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.pauseAgent",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.resumeAgent",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.abortAgent",
+          "group": "5_interactive",
+          "when": "devagent.interactiveSessionActive"
+        },
+        {
+          "command": "devagent.showTaskHistory",
+          "group": "6_utility"
+        },
+        {
+          "command": "devagent.openOutputDir",
+          "group": "6_utility"
+        },
+        {
+          "command": "devagent.clearDiagnostics",
+          "group": "6_utility"
+        },
+        {
+          "command": "devagent.startApiServer",
+          "group": "7_server"
+        },
+        {
+          "command": "devagent.stopApiServer",
+          "group": "7_server"
+        },
+        {
+          "command": "devagent.startLsp",
+          "when": "!config.devagent.lspEnabled",
+          "group": "7_server"
+        },
+        {
+          "command": "devagent.stopLsp",
+          "when": "config.devagent.lspEnabled",
+          "group": "7_server"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "devagent.analyzeRequirement",
+          "when": "true"
+        },
+        {
+          "command": "devagent.generateCode",
+          "when": "true"
+        },
+        {
+          "command": "devagent.repairBug",
+          "when": "true"
+        },
+        {
+          "command": "devagent.fullPipeline",
+          "when": "true"
+        },
+        {
+          "command": "devagent.runWithConfig",
+          "when": "true"
+        },
+        {
+          "command": "devagent.showTaskHistory",
+          "when": "true"
+        },
+        {
+          "command": "devagent.analyzeCurrentFile",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "devagent.clearDiagnostics",
+          "when": "true"
+        },
+        {
+          "command": "devagent.startLsp",
+          "when": "!config.devagent.lspEnabled"
+        },
+        {
+          "command": "devagent.stopLsp",
+          "when": "config.devagent.lspEnabled"
+        },
+        {
+          "command": "devagent.openOutputDir",
+          "when": "true"
+        },
+        {
+          "command": "devagent.runTests",
+          "when": "true"
+        },
+        {
+          "command": "devagent.debugCode",
+          "when": "true"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "devagentTasks",
+          "name": "DevAgent Tasks",
+          "icon": "$(hubot)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "DevAgent",
+      "properties": {
+        "devagent.apiUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8911",
+          "description": "DevAgent API server URL"
+        },
+        "devagent.interactive": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable interactive mode: approval gates + human review at each phase milestone"
+        },
+        "devagent.autoStartApi": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-start API server when extension activates (requires Python venv)"
+        },
+        "devagent.outputDir": {
+          "type": "string",
+          "default": "${workspaceFolder}/outputs",
+          "description": "Default output directory"
+        },
+        "devagent.lspEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Language Server for inline diagnostics"
+        },
+        "devagent.lspMode": {
+          "type": "string",
+          "default": "stdio",
+          "enum": [
+            "stdio",
+            "tcp"
+          ]
+        },
+        "devagent.lspPort": {
+          "type": "number",
+          "default": 2087
+        },
+        "devagent.showOutputChannel": {
+          "type": "boolean",
+          "default": true
+        },
+        "devagent.autoAnalyzeOnSave": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "devagent.analyzeRequirement",
+        "key": "ctrl+alt+d a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.generateCode",
+        "key": "ctrl+alt+d g",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.repairBug",
+        "key": "ctrl+alt+d r",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.fullPipeline",
+        "key": "ctrl+alt+d f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.analyzeCurrentFile",
+        "key": "ctrl+alt+d c",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.runWithConfig",
+        "key": "ctrl+alt+d p",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "devagent.openOutputDir",
+        "key": "ctrl+alt+d o",
+        "when": "editorTextFocus"
+      }
+    ]
+  }
+}

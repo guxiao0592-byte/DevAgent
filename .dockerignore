@@ -1,0 +1,46 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.eggs
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitlab-ci.yml
+
+# Node modules (local)
+node_modules/
+
+# Large docs
+docs/original/
+
+# Output dirs (generated at runtime)
+outputs/
+.devagent/
+
+# Local env file (users create their own)
+.env

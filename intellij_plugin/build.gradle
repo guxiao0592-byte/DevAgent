@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.17.2'
+}
+
+group = 'com.devagent'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.4'
+}
+
+intellij {
+    version = '2023.2.5'
+    type = 'IC' // IntelliJ IDEA Community
+    plugins = ['java']
+    updateSinceUntilBuild = false
+}
+
+patchPluginXml {
+    version = project.version
+    sinceBuild = '232'
+    changeNotes = """
+      <h3>1.0.0</h3>
+      <ul>
+        <li>Initial release</li>
+        <li>DevAgent task execution via HTTP API</li>
+        <li>Real-time output streaming via WebSocket</li>
+        <li>Tool window for task management</li>
+        <li>Project-level settings</li>
+      </ul>
+    """
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}

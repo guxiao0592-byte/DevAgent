@@ -1,0 +1,589 @@
+{
+  "project_summary": {
+    "name": "User Authentication System",
+    "description": "A secure user authentication system with registration, login, JWT token management, and role-based access control, built with FastAPI and SQLAlchemy.",
+    "target_users": "Application developers integrating authentication into their services",
+    "business_goals": [
+      "Provide secure user registration and login",
+      "Implement role-based access control",
+      "Ensure high test coverage and security"
+    ]
+  },
+  "domain_model": {
+    "entities": [
+      {
+        "name": "User",
+        "description": "Represents a registered user in the system",
+        "attributes": [
+          {
+            "name": "id",
+            "type": "int",
+            "description": "Unique identifier",
+            "constraints": "PK, auto-increment"
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "description": "User email address",
+            "constraints": "unique, not null, max 255 chars"
+          },
+          {
+            "name": "password_hash",
+            "type": "string",
+            "description": "Bcrypt hash of password",
+            "constraints": "not null"
+          },
+          {
+            "name": "role",
+            "type": "string",
+            "description": "User role (e.g., admin, user)",
+            "constraints": "not null, default 'user'"
+          },
+          {
+            "name": "is_active",
+            "type": "boolean",
+            "description": "Whether the user account is active",
+            "constraints": "default true"
+          },
+          {
+            "name": "created_at",
+            "type": "datetime",
+            "description": "Timestamp of account creation",
+            "constraints": "not null, auto-set"
+          },
+          {
+            "name": "updated_at",
+            "type": "datetime",
+            "description": "Timestamp of last update",
+            "constraints": "auto-update"
+          }
+        ],
+        "relationships": []
+      },
+      {
+        "name": "Role",
+        "description": "Defines a role with specific permissions",
+        "attributes": [
+          {
+            "name": "id",
+            "type": "int",
+            "description": "Unique identifier",
+            "constraints": "PK, auto-increment"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Role name",
+            "constraints": "unique, not null, max 50 chars"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "Role description",
+            "constraints": "max 255 chars"
+          }
+        ],
+        "relationships": [
+          {
+            "target": "User",
+            "type": "one-to-many",
+            "description": "A role can be assigned to many users"
+          }
+        ]
+      },
+      {
+        "name": "RefreshToken",
+        "description": "Stores refresh tokens for JWT token refresh",
+        "attributes": [
+          {
+            "name": "id",
+            "type": "int",
+            "description": "Unique identifier",
+            "constraints": "PK, auto-increment"
+          },
+          {
+            "name": "token",
+            "type": "string",
+            "description": "The refresh token value",
+            "constraints": "unique, not null"
+          },
+          {
+            "name": "user_id",
+            "type": "int",
+            "description": "Foreign key to User",
+            "constraints": "FK, not null"
+          },
+          {
+            "name": "expires_at",
+            "type": "datetime",
+            "description": "Expiration timestamp",
+            "constraints": "not null"
+          },
+          {
+            "name": "created_at",
+            "type": "datetime",
+            "description": "Timestamp of creation",
+            "constraints": "not null, auto-set"
+          }
+        ],
+        "relationships": [
+          {
+            "target": "User",
+            "type": "many-to-one",
+            "description": "A refresh token belongs to a user"
+          }
+        ]
+      }
+    ]
+  },
+  "actors": [
+    {
+      "id": "ACT-01",
+      "name": "User",
+      "description": "End user who registers and logs in",
+      "goals": [
+        "Register account",
+        "Log in",
+        "Refresh token"
+      ]
+    },
+    {
+      "id": "ACT-02",
+      "name": "Admin",
+      "description": "Administrator who manages roles and users",
+      "goals": [
+        "Manage roles",
+        "Assign roles to users"
+      ]
+    },
+    {
+      "id": "ACT-03",
+      "name": "System",
+      "description": "Automated processes for token validation and password hashing",
+      "goals": [
+        "Validate JWT",
+        "Hash passwords",
+        "Enforce access control"
+      ]
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-01",
+      "name": "User Registration",
+      "description": "Allow a new user to register with email and password. Password must be hashed with bcrypt before storage.",
+      "priority": "critical",
+      "actor_ids": [
+        "ACT-01"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "AC1: User can register with a valid email and password (min 8 chars, at least one uppercase, one lowercase, one digit).",
+        "AC2: Duplicate email registration returns error 409.",
+        "AC3: Password is stored as bcrypt hash with work factor >= 12.",
+        "AC4: On success, returns 201 with user ID and email."
+      ]
+    },
+    {
+      "id": "FR-02",
+      "name": "User Login",
+      "description": "Authenticate user with email and password, return JWT access token and refresh token.",
+      "priority": "critical",
+      "actor_ids": [
+        "ACT-01"
+      ],
+      "dependencies": [
+        "FR-01"
+      ],
+      "acceptance_criteria": [
+        "AC1: Valid credentials return 200 with access token (expiry 15 min) and refresh token (expiry 7 days).",
+        "AC2: Invalid email or password returns 401.",
+        "AC3: Inactive user account returns 403."
+      ]
+    },
+    {
+      "id": "FR-03",
+      "name": "Password Encryption with bcrypt",
+      "description": "All passwords must be hashed using bcrypt with a work factor of at least 12 before storage.",
+      "priority": "critical",
+      "actor_ids": [
+        "ACT-03"
+      ],
+      "dependencies": [
+        "FR-01"
+      ],
+      "acceptance_criteria": [
+        "AC1: Password hash is generated using bcrypt with work factor >= 12.",
+        "AC2: Plaintext password is never stored or logged.",
+        "AC3: Password verification uses bcrypt.checkpw."
+      ]
+    },
+    {
+      "id": "FR-04",
+      "name": "Token Refresh",
+      "description": "Allow users to obtain a new access token using a valid refresh token.",
+      "priority": "high",
+      "actor_ids": [
+        "ACT-01"
+      ],
+      "dependencies": [
+        "FR-02"
+      ],
+      "acceptance_criteria": [
+        "AC1: Valid refresh token returns 200 with new access token and optionally new refresh token (rotation).",
+        "AC2: Expired or revoked refresh token returns 401.",
+        "AC3: Refresh token is stored in database and can be revoked."
+      ]
+    },
+    {
+      "id": "FR-05",
+      "name": "Role-Based Access Control",
+      "description": "Define roles (e.g., admin, user) and assign them to users. Protect endpoints based on role.",
+      "priority": "high",
+      "actor_ids": [
+        "ACT-02",
+        "ACT-03"
+      ],
+      "dependencies": [
+        "FR-02"
+      ],
+      "acceptance_criteria": [
+        "AC1: Admin can create, read, update, delete roles.",
+        "AC2: Admin can assign a role to a user.",
+        "AC3: Endpoints can be decorated with required role; unauthorized roles return 403."
+      ]
+    }
+  ],
+  "nonfunctional_requirements": [
+    {
+      "id": "NFR-01",
+      "category": "security",
+      "name": "Security Vulnerability Protection",
+      "description": "The system must protect against common vulnerabilities: SQL injection, XSS, CSRF, and broken authentication.",
+      "target_metric": "Zero critical or high severity vulnerabilities in OWASP Top 10 scan."
+    },
+    {
+      "id": "NFR-02",
+      "category": "reliability",
+      "name": "Test Coverage",
+      "description": "The system must have comprehensive automated tests covering all functional requirements.",
+      "target_metric": "Code coverage >= 90% for unit and integration tests."
+    },
+    {
+      "id": "NFR-03",
+      "category": "maintainability",
+      "name": "Database Model Design",
+      "description": "Database models must be designed with proper relationships, indexes, and migrations using Alembic.",
+      "target_metric": "All tables have primary keys, foreign keys with indexes, and migration scripts are versioned."
+    },
+    {
+      "id": "NFR-04",
+      "category": "performance",
+      "name": "API Response Time",
+      "description": "API endpoints should respond quickly under normal load.",
+      "target_metric": "95th percentile response time < 500ms for authentication endpoints."
+    },
+    {
+      "id": "NFR-05",
+      "category": "usability",
+      "name": "Error Messages",
+      "description": "Error responses should be clear and consistent, using standard HTTP status codes and JSON format.",
+      "target_metric": "All error responses include 'detail' field with human-readable message."
+    }
+  ],
+  "use_cases": [
+    {
+      "id": "UC-01",
+      "name": "Register New User",
+      "actors": [
+        "ACT-01"
+      ],
+      "preconditions": [
+        "User is not logged in.",
+        "Email is not already registered."
+      ],
+      "main_flow": [
+        "1. User submits registration form with email and password.",
+        "2. System validates email format and password strength.",
+        "3. System checks if email already exists; if so, return error.",
+        "4. System hashes password with bcrypt (work factor 12).",
+        "5. System creates new User record with role 'user' and is_active=true.",
+        "6. System returns 201 with user ID and email."
+      ],
+      "alternative_flows": [
+        {
+          "condition": "Invalid email format",
+          "flow": [
+            "2a. System returns 400 with validation error."
+          ]
+        },
+        {
+          "condition": "Weak password",
+          "flow": [
+            "2b. System returns 400 with password policy error."
+          ]
+        },
+        {
+          "condition": "Duplicate email",
+          "flow": [
+            "3a. System returns 409 with 'Email already registered'."
+          ]
+        }
+      ],
+      "postconditions": [
+        "User account is created and stored in database.",
+        "Password is hashed and never stored in plaintext."
+      ],
+      "business_rules": [
+        "Password must be at least 8 characters, contain uppercase, lowercase, and digit.",
+        "Email must be unique."
+      ]
+    },
+    {
+      "id": "UC-02",
+      "name": "User Login",
+      "actors": [
+        "ACT-01"
+      ],
+      "preconditions": [
+        "User has registered account.",
+        "User is not currently authenticated."
+      ],
+      "main_flow": [
+        "1. User submits email and password.",
+        "2. System looks up user by email.",
+        "3. If user not found, return 401.",
+        "4. System verifies password against stored bcrypt hash.",
+        "5. If password invalid, return 401.",
+        "6. If user account is inactive, return 403.",
+        "7. System generates JWT access token (15 min expiry) and refresh token (7 days expiry).",
+        "8. System stores refresh token in database.",
+        "9. System returns 200 with tokens."
+      ],
+      "alternative_flows": [
+        {
+          "condition": "User not found",
+          "flow": [
+            "3a. Return 401 'Invalid credentials'."
+          ]
+        },
+        {
+          "condition": "Password mismatch",
+          "flow": [
+            "5a. Return 401 'Invalid credentials'."
+          ]
+        },
+        {
+          "condition": "Inactive account",
+          "flow": [
+            "6a. Return 403 'Account disabled'."
+          ]
+        }
+      ],
+      "postconditions": [
+        "User receives valid JWT tokens.",
+        "Refresh token is stored in database."
+      ],
+      "business_rules": [
+        "Access token expires in 15 minutes.",
+        "Refresh token expires in 7 days."
+      ]
+    },
+    {
+      "id": "UC-03",
+      "name": "Refresh Access Token",
+      "actors": [
+        "ACT-01"
+      ],
+      "preconditions": [
+        "User has a valid refresh token."
+      ],
+      "main_flow": [
+        "1. User sends refresh token to /refresh endpoint.",
+        "2. System validates refresh token (exists, not expired, not revoked).",
+        "3. If invalid, return 401.",
+        "4. System generates new access token (15 min expiry).",
+        "5. Optionally, system rotates refresh token (issue new, revoke old).",
+        "6. System returns 200 with new access token (and optionally new refresh token)."
+      ],
+      "alternative_flows": [
+        {
+          "condition": "Token expired or revoked",
+          "flow": [
+            "3a. Return 401 'Invalid refresh token'."
+          ]
+        }
+      ],
+      "postconditions": [
+        "New access token is issued.",
+        "Old refresh token may be revoked if rotation is implemented."
+      ],
+      "business_rules": [
+        "Refresh token rotation is recommended for security."
+      ]
+    },
+    {
+      "id": "UC-04",
+      "name": "Manage Roles (Admin)",
+      "actors": [
+        "ACT-02"
+      ],
+      "preconditions": [
+        "Admin is authenticated with JWT.",
+        "Admin has 'admin' role."
+      ],
+      "main_flow": [
+        "1. Admin sends request to create/update/delete role.",
+        "2. System validates admin permissions.",
+        "3. System performs CRUD operation on Role table.",
+        "4. System returns appropriate response (201, 200, 204)."
+      ],
+      "alternative_flows": [
+        {
+          "condition": "Non-admin user attempts",
+          "flow": [
+            "2a. Return 403 Forbidden."
+          ]
+        },
+        {
+          "condition": "Role name already exists",
+          "flow": [
+            "3a. Return 409 Conflict."
+          ]
+        }
+      ],
+      "postconditions": [
+        "Role is created/updated/deleted in database."
+      ],
+      "business_rules": [
+        "Only admin can manage roles.",
+        "Role names must be unique."
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "technical",
+      "description": "Must use Python 3.9+, FastAPI, SQLAlchemy, and pytest."
+    },
+    {
+      "type": "technical",
+      "description": "Development database: SQLite; Production database: PostgreSQL."
+    },
+    {
+      "type": "technical",
+      "description": "Authentication must use JWT (access token) and bcrypt for password hashing."
+    },
+    {
+      "type": "business",
+      "description": "System must support at least 1000 concurrent users."
+    }
+  ],
+  "risk_assessment": [
+    {
+      "risk": "Insecure password storage due to misconfiguration of bcrypt work factor.",
+      "probability": "low",
+      "impact": "high",
+      "mitigation": "Enforce work factor >= 12 in code and configuration; code review.",
+      "contingency": "Audit and rotate all passwords if breach detected."
+    },
+    {
+      "risk": "JWT token theft leading to unauthorized access.",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Use short-lived access tokens (15 min) and refresh token rotation; store refresh tokens securely (HTTP-only cookies).",
+      "contingency": "Implement token revocation list and force re-login."
+    },
+    {
+      "risk": "SQL injection via user input.",
+      "probability": "low",
+      "impact": "high",
+      "mitigation": "Use SQLAlchemy ORM with parameterized queries; avoid raw SQL.",
+      "contingency": "Run regular security scans and penetration tests."
+    },
+    {
+      "risk": "Insufficient test coverage leading to undetected bugs.",
+      "probability": "medium",
+      "impact": "medium",
+      "mitigation": "Enforce minimum 90% coverage; include unit, integration, and security tests.",
+      "contingency": "Add automated CI pipeline to fail on coverage drop."
+    }
+  ],
+  "assumptions": [
+    "Email service for verification is out of scope.",
+    "User roles are predefined (admin, user) and can be extended.",
+    "Token revocation is handled via database blacklist or refresh token deletion."
+  ],
+  "security_requirements": [
+    {
+      "id": "NFR-SEC-01",
+      "category": "authentication",
+      "description": "All API endpoints must require valid JWT authentication except registration and login.",
+      "target_metric": "0 unauthenticated requests succeed on protected endpoints.",
+      "owasp_category": "A2: Broken Authentication"
+    },
+    {
+      "id": "NFR-SEC-02",
+      "category": "data_protection",
+      "description": "All passwords hashed with bcrypt (work factor >= 12).",
+      "target_metric": "No plaintext passwords in storage or logs.",
+      "owasp_category": "A3: Sensitive Data Exposure"
+    },
+    {
+      "id": "NFR-SEC-03",
+      "category": "input_validation",
+      "description": "Validate and sanitize all user inputs; use parameterized queries.",
+      "target_metric": "0 SQL injection or XSS vulnerabilities.",
+      "owasp_category": "A1: Injection"
+    },
+    {
+      "id": "NFR-SEC-04",
+      "category": "access_control",
+      "description": "Implement role-based access control; endpoints check user role.",
+      "target_metric": "0 unauthorized role accesses succeed.",
+      "owasp_category": "A5: Broken Access Control"
+    }
+  ],
+  "observability_requirements": [
+    {
+      "id": "NFR-OBS-01",
+      "category": "logging",
+      "description": "Structured JSON logging with request_id propagation.",
+      "target_metric": "Every request has traceable log entries from entry to exit."
+    },
+    {
+      "id": "NFR-OBS-02",
+      "category": "health_check",
+      "description": "/health endpoint returning service + dependency status.",
+      "target_metric": "Response within 1 second, includes DB status."
+    },
+    {
+      "id": "NFR-OBS-03",
+      "category": "metrics",
+      "description": "Prometheus metrics: request count, latency (p50/p95/p99), error rate.",
+      "target_metric": "Metrics available at /metrics endpoint."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "JWT",
+      "definition": "JSON Web Token — compact, URL-safe token for authentication."
+    },
+    {
+      "term": "bcrypt",
+      "definition": "Password hashing function with adaptive work factor."
+    },
+    {
+      "term": "Refresh Token",
+      "definition": "Long-lived token used to obtain new access tokens."
+    },
+    {
+      "term": "Access Token",
+      "definition": "Short-lived token used to access protected resources."
+    },
+    {
+      "term": "RBAC",
+      "definition": "Role-Based Access Control."
+    }
+  ]
+}

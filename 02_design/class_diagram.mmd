@@ -1,0 +1,28 @@
+classDiagram
+    class Calculator {
+        -history: List[CalculationRecord]
+        +add(a: float, b: float) float
+        +subtract(a: float, b: float) float
+        +multiply(a: float, b: float) float
+        +divide(a: float, b: float) float
+        +chain_calculate(operations: List[Tuple[str, float]]) float
+        +get_history() List[CalculationRecord]
+        +clear_history() None
+    }
+    class CalculationRecord {
+        -operand1: float
+        -operator: str
+        -operand2: float
+        -result: float
+        -timestamp: datetime
+        +__init__(operand1: float, operator: str, operand2: float, result: float)
+    }
+    class Operator {
+        <<enumeration>>
+        ADD
+        SUBTRACT
+        MULTIPLY
+        DIVIDE
+    }
+    Calculator --> CalculationRecord : creates
+    Calculator ..> Operator : uses

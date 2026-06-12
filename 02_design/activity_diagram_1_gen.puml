@@ -1,0 +1,14 @@
+@startuml
+title Perform Basic Calculation
+
+:User enters first operand;
+:User selects operator;
+:User enters second operand;
+if (Division by zero?) then (yes)
+:Display error message;
+else (no)
+:Compute result;
+endif
+:Record in history;
+:Display result;
+@enduml

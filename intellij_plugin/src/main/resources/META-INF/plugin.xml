@@ -1,0 +1,80 @@
+<idea-plugin>
+    <id>com.devagent.intellij</id>
+    <name>DevAgent</name>
+    <vendor email="support@devagent.dev" url="https://devagent.dev">DevAgent Team</vendor>
+
+    <description><![CDATA[
+      <h2>DevAgent for IntelliJ IDEA</h2>
+      <p>LLM-based Software Engineering Agent that integrates directly into your IDE.</p>
+      <h3>Features:</h3>
+      <ul>
+        <li>Analyze requirements and generate design specifications</li>
+        <li>Generate implementation code from design specs</li>
+        <li>Debug and repair code with automated test execution</li>
+        <li>Full end-to-end pipeline execution</li>
+        <li>Real-time task output via WebSocket streaming</li>
+      </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      <h3>1.0.0</h3>
+      <ul>
+        <li>Initial release with core DevAgent integration</li>
+      </ul>
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow
+            id="DevAgent"
+            anchor="bottom"
+            icon="AllIcons.Toolwindows.ToolWindowMessages"
+            factoryClass="com.devagent.intellij.toolwindow.DevAgentToolWindowFactory"
+        />
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.devagent.intellij.settings.DevAgentConfigurable"
+            displayName="DevAgent"
+        />
+    </extensions>
+
+    <actions>
+        <action
+            id="DevAgent.AnalyzeRequirement"
+            class="com.devagent.intellij.actions.DevAgentAction"
+            text="DevAgent: Analyze Requirement"
+            description="Analyze requirements and produce design specification">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt D" second-keystroke="A"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action
+            id="DevAgent.GenerateCode"
+            class="com.devagent.intellij.actions.DevAgentAction"
+            text="DevAgent: Generate Implementation"
+            description="Generate code from design specification">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt D" second-keystroke="G"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action
+            id="DevAgent.RepairBug"
+            class="com.devagent.intellij.actions.DevAgentAction"
+            text="DevAgent: Repair Bug"
+            description="Debug and repair code issues">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt D" second-keystroke="R"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action
+            id="DevAgent.FullPipeline"
+            class="com.devagent.intellij.actions.DevAgentAction"
+            text="DevAgent: Full Pipeline"
+            description="Execute end-to-end DevAgent pipeline">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt D" second-keystroke="F"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

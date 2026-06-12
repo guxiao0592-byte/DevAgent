@@ -1,0 +1,123 @@
+# DevAgent GitLab CI/CD Pipeline
+# 校内 GitLab 代码质量扫描 + 自动化测试 + Docker 构建 + 华为云部署
+
+stages:
+  - quality       # 代码质量扫描 (Ruff + mypy)
+  - test          # 单元测试 (pytest + coverage)
+  - build         # Docker 镜像构建
+  - deploy        # 部署到华为云 ECS
+
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  DOCKER_LATEST: $CI_REGISTRY_IMAGE:latest
+
+# ============================================================================
+# Stage 1: Code Quality
+# ============================================================================
+
+ruff:
+  stage: quality
+  image: python:3.12-slim
+  before_script:
+    - pip install ruff==0.8.0
+  script:
+    - ruff check devagent/ --output-format gitlab > ruff-report.json || true
+    - ruff check devagent/ --statistics
+  artifacts:
+    reports:
+      codequality: ruff-report.json
+    paths:
+      - ruff-report.json
+    expire_in: 7 days
+  allow_failure: true
+
+mypy:
+  stage: quality
+  image: python:3.12-slim
+  before_script:
+    - pip install mypy==1.13.0
+    - pip install -e ".[all]"
+  script:
+    - mypy devagent/ --ignore-missing-imports --no-error-summary || true
+  allow_failure: true
+
+# ============================================================================
+# Stage 2: Test
+# ============================================================================
+
+pytest:
+  stage: test
+  image: python:3.12-slim
+  before_script:
+    - pip install -e ".[all]"
+    - pip install pytest-cov
+  script:
+    - python -m pytest tests/
+        --junitxml=pytest-report.xml
+        --cov=devagent
+        --cov-report=term
+        --cov-report=html:coverage
+        --cov-report=xml:coverage.xml
+        -v --tb=short
+  artifacts:
+    reports:
+      junit: pytest-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage/
+      - pytest-report.xml
+      - coverage.xml
+    expire_in: 30 days
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+
+# ============================================================================
+# Stage 3: Docker Build
+# ============================================================================
+
+docker-build:
+  stage: build
+  image: docker:27-dind
+  services:
+    - docker:27-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $DOCKER_IMAGE -t $DOCKER_LATEST .
+    - docker push $DOCKER_IMAGE
+    - docker push $DOCKER_LATEST
+  only:
+    - main
+    - tags
+
+# ============================================================================
+# Stage 4: Deploy to Huawei Cloud ECS
+# ============================================================================
+
+deploy-huawei:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $HUAWEI_ECS_HOST >> ~/.ssh/known_hosts
+  script:
+    - |
+      ssh $HUAWEI_ECS_USER@$HUAWEI_ECS_HOST "
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+        docker pull $DOCKER_IMAGE &&
+        docker stop devagent || true &&
+        docker rm devagent || true &&
+        docker run -d --name devagent
+          -p 8911:8911
+          -e DEVAGENT_CONFIG=/app/devagent/configs/config.yaml
+          -v /data/devagent/outputs:/app/outputs
+          -v /data/devagent/.devagent:/app/.devagent
+          $DOCKER_IMAGE
+      "
+  only:
+    - main
+  when: manual  # 手动触发部署

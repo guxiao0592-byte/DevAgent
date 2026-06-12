@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.ui.views">
+      <view
+            id="com.devagent.eclipse.views.DevAgentView"
+            name="DevAgent"
+            class="com.devagent.eclipse.views.DevAgentView"
+            icon="icons/devagent.png"
+            category="com.devagent.eclipse">
+      </view>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands">
+      <command
+            id="com.devagent.eclipse.command.analyzeRequirement"
+            name="DevAgent: Analyze Requirement">
+      </command>
+      <command
+            id="com.devagent.eclipse.command.generateCode"
+            name="DevAgent: Generate Implementation">
+      </command>
+      <command
+            id="com.devagent.eclipse.command.repairBug"
+            name="DevAgent: Repair Bug">
+      </command>
+      <command
+            id="com.devagent.eclipse.command.fullPipeline"
+            name="DevAgent: Full Pipeline">
+      </command>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            commandId="com.devagent.eclipse.command.analyzeRequirement"
+            class="com.devagent.eclipse.actions.DevAgentHandler">
+      </handler>
+      <handler
+            commandId="com.devagent.eclipse.command.generateCode"
+            class="com.devagent.eclipse.actions.DevAgentHandler">
+      </handler>
+      <handler
+            commandId="com.devagent.eclipse.command.repairBug"
+            class="com.devagent.eclipse.actions.DevAgentHandler">
+      </handler>
+      <handler
+            commandId="com.devagent.eclipse.command.fullPipeline"
+            class="com.devagent.eclipse.actions.DevAgentHandler">
+      </handler>
+   </extension>
+
+   <extension point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.devagent.eclipse.command.analyzeRequirement"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+D A">
+      </key>
+      <key
+            commandId="com.devagent.eclipse.command.generateCode"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+D G">
+      </key>
+      <key
+            commandId="com.devagent.eclipse.command.repairBug"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+D R">
+      </key>
+      <key
+            commandId="com.devagent.eclipse.command.fullPipeline"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+D F">
+      </key>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=window">
+         <menu id="devagentMenu" label="DevAgent">
+            <command commandId="com.devagent.eclipse.command.analyzeRequirement">
+            </command>
+            <command commandId="com.devagent.eclipse.command.generateCode">
+            </command>
+            <command commandId="com.devagent.eclipse.command.repairBug">
+            </command>
+            <command commandId="com.devagent.eclipse.command.fullPipeline">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar id="com.devagent.eclipse.toolbar">
+            <command commandId="com.devagent.eclipse.command.analyzeRequirement"
+                     icon="icons/devagent.png"
+                     tooltip="DevAgent: Analyze Requirement">
+            </command>
+            <command commandId="com.devagent.eclipse.command.fullPipeline"
+                     tooltip="DevAgent: Full Pipeline">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages">
+      <page
+            id="com.devagent.eclipse.preferences.DevAgentPreferencePage"
+            class="com.devagent.eclipse.preferences.DevAgentPreferencePage"
+            name="DevAgent">
+      </page>
+   </extension>
+</plugin>
